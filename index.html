@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Web App</title>
+    <title>Login</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.22.0/dist/umd/supabase.min.js"></script>
 </head>
 <body>
-
     <div class="login-container">
-        <h2>Login to Your Account</h2>
+        <h1>Login</h1>
         <form id="login-form">
-            <input type="text" id="username" placeholder="Enter your username" required>
-            <input type="password" id="password" placeholder="Enter your password" required>
+            <label for="username">Username</label>
+            <input type="text" id="username" required>
+            
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+            
             <button type="button" onclick="login()">Login</button>
         </form>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
