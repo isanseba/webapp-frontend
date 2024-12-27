@@ -1,19 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Login</h1>
-    <form id="loginForm">
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
-    <script src="script.js"></script>
+
+  <!-- Login Section -->
+  <div id="login-section">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Enter username" />
+    <input type="password" id="password" placeholder="Enter password" />
+    <button onclick="login()">Login</button>
+    <p id="error-message" style="color: red;"></p>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="admin-dashboard" style="display: none;">
+    <h2>Admin Dashboard</h2>
+    <button onclick="logout()">Logout</button>
+    <p>Welcome, Admin! Here you can manage users.</p>
+    <!-- Add admin features here -->
+  </div>
+
+  <!-- Business Dashboard -->
+  <div id="business-dashboard" style="display: none;">
+    <h2>Business Dashboard</h2>
+    <button onclick="logout()">Logout</button>
+    <p>Welcome to your business dashboard!</p>
+    <p>Your customer reviews and API integration settings go here.</p>
+    <label for="google-api">Google API Key:</label>
+    <input type="text" id="google-api" placeholder="Enter Google API key" />
+    <label for="yelp-api">Yelp API Key:</label>
+    <input type="text" id="yelp-api" placeholder="Enter Yelp API key" />
+    <label for="sendgrid-api">SendGrid API Key:</label>
+    <input type="text" id="sendgrid-api" placeholder="Enter SendGrid API key" />
+    <!-- You can add more fields and functionalities here -->
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
-  
