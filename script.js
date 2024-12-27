@@ -1,11 +1,11 @@
-// Initialize Supabase client
+// Initialize Supabase client (directly using the global `supabase` object)
 const supabaseUrl = 'https://ulxjzsvdbhopliovqyay.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVseGp6c3ZkYmhvcGxpb3ZxeWF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUyOTEzNDUsImV4cCI6MjA1MDg2NzM0NX0.b97zaEdtYZ4pRGbSCr186noyILI2cN2tiKFRu0HtHZE'; // Ensure the key is valid
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // Function to handle login
 async function login(event) {
-    event.preventDefault();  // Prevent form submission to avoid page reload
+    event.preventDefault();  // Ensure this is called with the event object
 
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
@@ -42,5 +42,5 @@ async function login(event) {
     }
 }
 
-// Log Supabase client initialization to console
+// Log Supabase client initialization to console (for debugging)
 console.log("Supabase Client Initialized:", supabase);
