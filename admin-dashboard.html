@@ -7,10 +7,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
-    <button id="logoutBtn">Logout</button>
-    <h2>Manage Users</h2>
-    <ul id="userList"></ul>
+
+    <div id="admin-dashboard">
+        <h2>Admin Dashboard</h2>
+        <button onclick="logout()">Logout</button>
+        <p>Welcome, Admin! Here you can manage users and oversee the app's activities.</p>
+        <!-- Admin features here -->
+    </div>
+
+    <script>
+        // Logout function
+        function logout() {
+            // Clear the user data from localStorage
+            localStorage.removeItem('user');
+
+            // Redirect to the login page
+            window.location.href = 'index.html';
+        }
+    </script>
 
     <script>
         // Fetch the current user from localStorage
@@ -45,3 +59,5 @@
     </script>
 </body>
 </html>
+
+

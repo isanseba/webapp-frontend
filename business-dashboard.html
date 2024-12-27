@@ -1,15 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Business Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Dashboard</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="business-dashboard" style="display: none;">
-    <h2>Business Dashboard</h2>
-    <button onclick="logout()">Logout</button>
+
+    <div id="business-dashboard">
+        <h2>Business Dashboard</h2>
+        <button onclick="logout()">Logout</button>
+        <p>Welcome to your Dashboard!</p>
+        <!-- Business features here -->
+    </div>
+
+    <script>
+        // Logout function
+        function logout() {
+            // Clear the user data from localStorage
+            localStorage.removeItem('user');
+
+            // Redirect to the login page
+            window.location.href = 'index.html';
+        }
+    </script>
 
     <h3>API Keys Configuration</h3>
     <form id="apiKeysForm">

@@ -3,37 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - Web App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Login Form Section -->
-    <div id="login-form-container">
-        <h1>Welcome to the Web App</h1>
+
+    <div id="login-container">
+        <h2>Welcome to the Web App</h2>
         <p>Please login to continue</p>
-        <form id="login-form">
+
+        <!-- Login Form -->
+        <form id="login-form" onsubmit="event.preventDefault(); login();">
             <input type="text" id="username" placeholder="Enter your username" required>
             <input type="password" id="password" placeholder="Enter your password" required>
-            <button type="button" onclick="login()">Login</button>
+            <select id="user-type" required>
+                <option value="admin">Admin</option>
+                <option value="business">Business</option>
+            </select>
+            <button type="submit">Login</button>
         </form>
     </div>
 
-    <!-- Admin Dashboard Section (Hidden by Default) -->
-    <div id="admin-dashboard" style="display: none;">
-        <h2>Admin Dashboard</h2>
-        <button onclick="logout()">Logout</button>
-        <p>Welcome, Admin! Here you can manage users and oversee the app's activities.</p>
-        <!-- Admin features and management tools go here -->
-    </div>
+    <script>
+        // Login function
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const userType = document.getElementById('user-type').value;
 
-    <!-- Business Dashboard Section (Hidden by Default) -->
-    <div id="business-dashboard" style="display: none;">
-        <h2>Business Dashboard</h2>
-        <button onclick="logout()">Logout</button>
-        <p>Welcome to your business dashboard! You can manage your business details, view customer data, and more.</p>
-        <!-- Business client features go here -->
-    </div>
+            // Check if the username and password are entered
+            if (username && password) {
+                const user = { username, password, status: userType };
+                
+                // Store user data in local storage
+                localStorage.setItem('user', JSON.stringify(user));
 
-    <script src="script.js"></script>
+                // Redirect to appropriate dashboard based on user status
+                if (userType === 'admin') {
+                    window.location.href = 'admin-dashboard.html'; // Admin dashboard URL
+                } else if (userType === 'business') {
+                    window.location.href = 'business-dashboard.html'; // Business dashboard URL
+                }
+            } else {
+                alert('Please enter valid login credentials.');
+            }
+        }
+
+        // Optional: Auto-login if there's a stored user in localStorage (for testing)
+        window.onload = () => {
+            const storedUser = JSON.parse(localStorage.getItem('user'));
+            if (storedUser) {
+                if (storedUser.status === 'admin') {
+                    window.location.href = 'admin-dashboard.html';
+                } else if (storedUser.status === 'business') {
+                    window.location.href = 'business-dashboard.html';
+                }
+            }
+        }
+    </script>
 </body>
 </html>
