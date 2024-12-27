@@ -1,31 +1,34 @@
-// This is the login function called by both the button click and Enter key press
-function login() {
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
+// Initialize Supabase client
+const supabase = supabase.createClient('https://ulxjzsvdbhopliovqyay.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVseGp6c3ZkYmhvcGxpb3ZxeWF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUyOTEzNDUsImV4cCI6MjA1MDg2NzM0NX0.b97zaEdtYZ4pRGbSCr186noyILI2cN2tiKFRu0HtHZE');
 
-  // You can replace this with your actual login validation logic
-  if (username && password) {
-      // Assuming the login is successful, you can set a session or token
-      alert("Logged in as " + username);
+async function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-      // You can now show the respective dashboard (Admin or Business)
-      // For example, if it's admin:
-      if (username === 'admin') {
-          document.getElementById('admin-dashboard').style.display = 'block';
-          document.getElementById('login-form').style.display = 'none';
-      } else {
-          document.getElementById('business-dashboard').style.display = 'block';
-          document.getElementById('login-form').style.display = 'none';
-      }
-  } else {
-      alert("Please enter both username and password.");
-  }
+    // Query Supabase to check if the username and password exist
+    const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('username', username)
+        .eq('password', password)
+        .single();
+
+    if (error) {
+        console.error('Error logging in:', error.message);
+        alert('Invalid username or password');
+        return;
+    }
+
+    // If we find the user
+    if (data) {
+        // Save user data to localStorage (or sessionStorage) to remember the user
+        localStorage.setItem('user', JSON.stringify(data));
+
+        // Redirect to the correct dashboard based on user role
+        if (data.status === 'admin') {
+            window.location.href = 'admin-dashboard.html';
+        } else {
+            window.location.href = 'business-dashboard.html';
+        }
+    }
 }
-
-// Add the event listener for the Enter key press
-document.querySelector('form').addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-      event.preventDefault();  // Prevent form submission if necessary
-      login(); // Trigger the login function
-  }
-});

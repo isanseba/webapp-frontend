@@ -8,46 +8,77 @@
 </head>
 <body>
 
-    <div id="business-dashboard">
-        <h2>Business Dashboard</h2>
+    <div class="dashboard-container">
+        <h1>Welcome, Business User!</h1>
         <button onclick="logout()">Logout</button>
-        <p>Welcome to your Dashboard!</p>
-        <!-- Business features here -->
+
+        <h3>Your API Keys</h3>
+        <div id="api-keys">
+            <!-- API keys will be displayed here -->
+        </div>
+
+        <h3>Update Your API Keys</h3>
+        <form id="update-api-form">
+            <input type="text" id="google-api-key" placeholder="Google API Key" required>
+            <input type="text" id="yelp-api-key" placeholder="Yelp API Key" required>
+            <input type="text" id="sendgrid-api-key" placeholder="SendGrid API Key" required>
+            <button type="button" onclick="updateApiKeys()">Save API Keys</button>
+        </form>
     </div>
 
+    <script src="script.js"></script>
     <script>
-        // Logout function
-        function logout() {
-            // Clear the user data from localStorage
-            localStorage.removeItem('user');
+        const user = JSON.parse(localStorage.getItem('user'));
 
-            // Redirect to the login page
+        if (!user) {
+            alert('Please log in first!');
+            window.location.href = 'index.html';
+        }
+
+        // Fetch user's API keys and display them
+        async function fetchApiKeys() {
+            const { data, error } = await supabase
+                .from('api_keys')
+                .select('*')
+                .eq('user_id', user.id);
+
+            if (error) {
+                console.error('Error fetching API keys:', error.message);
+                return;
+            }
+
+            document.getElementById('google-api-key').value = data[0]?.google_api_key || '';
+            document.getElementById('yelp-api-key').value = data[0]?.yelp_api_key || '';
+            document.getElementById('sendgrid-api-key').value = data[0]?.sendgrid_api_key || '';
+        }
+
+        fetchApiKeys();
+
+        // Update API keys
+        async function updateApiKeys() {
+            const googleApiKey = document.getElementById('google-api-key').value;
+            const yelpApiKey = document.getElementById('yelp-api-key').value;
+            const sendGridApiKey = document.getElementById('sendgrid-api-key').value;
+
+            const { data, error } = await supabase
+                .from('api_keys')
+                .upsert([
+                    { user_id: user.id, google_api_key: googleApiKey, yelp_api_key: yelpApiKey, sendgrid_api_key: sendGridApiKey }
+                ]);
+
+            if (error) {
+                console.error('Error saving API keys:', error.message);
+                alert('There was an issue saving your API keys.');
+                return;
+            }
+
+            alert('API keys saved successfully!');
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
             window.location.href = 'index.html';
         }
     </script>
-
-    <h3>API Keys Configuration</h3>
-    <form id="apiKeysForm">
-      <label for="googleApiKey">Google API Key:</label>
-      <input type="text" id="googleApiKey" name="googleApiKey" value="" placeholder="Enter your Google API key">
-      <br>
-      <label for="yelpApiKey">Yelp API Key:</label>
-      <input type="text" id="yelpApiKey" name="yelpApiKey" value="" placeholder="Enter your Yelp API key">
-      <br>
-      <label for="sendgridApiKey">SendGrid API Key:</label>
-      <input type="text" id="sendgridApiKey" name="sendgridApiKey" value="" placeholder="Enter your SendGrid API key">
-      <br>
-      <button type="button" onclick="saveApiKeys()">Save API Keys</button>
-    </form>
-
-    <p>Welcome to your business dashboard!</p>
-
-    <!-- Example section for API usage (could be expanded) -->
-    <h3>Test API Integration</h3>
-    <button onclick="testGooglePlaces()">Test Google Places API</button>
-    <div id="googlePlacesResults"></div>
-  </div>
-
-  <script src="script.js"></script>
 </body>
 </html>

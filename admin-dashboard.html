@@ -8,56 +8,64 @@
 </head>
 <body>
 
-    <div id="admin-dashboard">
-        <h2>Admin Dashboard</h2>
+    <div class="dashboard-container">
+        <h1>Welcome, Admin!</h1>
         <button onclick="logout()">Logout</button>
-        <p>Welcome, Admin! Here you can manage users and oversee the app's activities.</p>
-        <!-- Admin features here -->
+
+        <h3>Manage Users</h3>
+        <div id="user-list">
+            <!-- Users will be listed here -->
+        </div>
     </div>
 
+    <script src="script.js"></script>
     <script>
-        // Logout function
-        function logout() {
-            // Clear the user data from localStorage
-            localStorage.removeItem('user');
+        // Check if the user is an admin
+        const user = JSON.parse(localStorage.getItem('user'));
 
-            // Redirect to the login page
-            window.location.href = 'index.html';
+        if (user?.status !== 'admin') {
+            alert('Access Denied. You are not an admin.');
+            window.location.href = 'index.html'; // Redirect to login page if not admin
         }
-    </script>
-
-    <script>
-        // Fetch the current user from localStorage
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-        if (!currentUser || currentUser.status !== 'admin') {
-            // Redirect to login page if the user is not an admin
-            window.location.href = 'index.html';
-        }
-
-        // Logout functionality
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('currentUser');
-            window.location.href = 'index.html';
-        });
 
         // Fetch users and display them
-        async function displayUsers() {
-            const response = await fetch('http://localhost:3000/users');
-            const users = await response.json();
-            const userList = document.getElementById('userList');
-            userList.innerHTML = ''; // Clear the list
+        async function fetchUsers() {
+            const { data, error } = await supabase.from('users').select('*');
 
-            users.forEach(user => {
-                const li = document.createElement('li');
-                li.textContent = `${user.username} (${user.status})`;
-                userList.appendChild(li);
-            });
+            if (error) {
+                console.error('Error fetching users:', error.message);
+                return;
+            }
+
+            const userListContainer = document.getElementById('user-list');
+            userListContainer.innerHTML = data.map(user => {
+                return `
+                    <div class="user-card">
+                        <p>${user.username} - ${user.status}</p>
+                        <button onclick="removeUser(${user.id})">Remove</button>
+                    </div>
+                `;
+            }).join('');
         }
 
-        displayUsers();
+        fetchUsers();
+
+        async function removeUser(userId) {
+            const { error } = await supabase.from('users').delete().eq('id', userId);
+
+            if (error) {
+                console.error('Error removing user:', error.message);
+                alert('Failed to remove user.');
+            } else {
+                alert('User removed successfully');
+                fetchUsers(); // Refresh the user list
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
     </script>
 </body>
 </html>
-
-
