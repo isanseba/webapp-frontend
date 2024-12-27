@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Business Dashboard</h1>
-    <button id="logoutBtn">Logout</button>
-    <h2>Welcome to Your Business Dashboard!</h2>
+  <div id="business-dashboard" style="display: none;">
+    <h2>Business Dashboard</h2>
+    <button onclick="logout()">Logout</button>
 
-    <script>
-        // Fetch the current user from localStorage
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    <h3>API Keys Configuration</h3>
+    <form id="apiKeysForm">
+      <label for="googleApiKey">Google API Key:</label>
+      <input type="text" id="googleApiKey" name="googleApiKey" value="" placeholder="Enter your Google API key">
+      <br>
+      <label for="yelpApiKey">Yelp API Key:</label>
+      <input type="text" id="yelpApiKey" name="yelpApiKey" value="" placeholder="Enter your Yelp API key">
+      <br>
+      <label for="sendgridApiKey">SendGrid API Key:</label>
+      <input type="text" id="sendgridApiKey" name="sendgridApiKey" value="" placeholder="Enter your SendGrid API key">
+      <br>
+      <button type="button" onclick="saveApiKeys()">Save API Keys</button>
+    </form>
 
-        if (!currentUser || currentUser.status !== 'paid') {
-            // Redirect to login page if the user is not a paid user
-            window.location.href = 'index.html';
-        }
+    <p>Welcome to your business dashboard!</p>
 
-        // Logout functionality
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('currentUser');
-            window.location.href = 'index.html';
-        });
-    </script>
+    <!-- Example section for API usage (could be expanded) -->
+    <h3>Test API Integration</h3>
+    <button onclick="testGooglePlaces()">Test Google Places API</button>
+    <div id="googlePlacesResults"></div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
