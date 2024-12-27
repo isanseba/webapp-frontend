@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <button id="logoutBtn">Logout</button>
+    <h2>Manage Users</h2>
+    <ul id="userList"></ul>
+
+    <script>
+        // Fetch the current user from localStorage
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+        if (!currentUser || currentUser.status !== 'admin') {
+            // Redirect to login page if the user is not an admin
+            window.location.href = 'index.html';
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+
+        // Fetch users and display them
+        async function displayUsers() {
+            const response = await fetch('http://localhost:3000/users');
+            const users = await response.json();
+            const userList = document.getElementById('userList');
+            userList.innerHTML = ''; // Clear the list
+
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.textContent = `${user.username} (${user.status})`;
+                userList.appendChild(li);
+            });
+        }
+
+        displayUsers();
+    </script>
+</body>
+</html>

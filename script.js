@@ -1,47 +1,31 @@
-const backendUrl = "https://webapp-backend-kgol.onrender.com/users";
+const loginForm = document.getElementById('loginForm');
+const apiUrl = 'http://localhost:3000/users'; // Your backend URL
 
-document.getElementById("login-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
+// Handle login form submission
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-  try {
-    const response = await fetch(backendUrl);
+    // Fetch users from the backend
+    const response = await fetch(apiUrl);
     const users = await response.json();
 
+    // Find the user with matching username and password
     const user = users.find(u => u.username === username && u.password === password);
 
     if (user) {
-      if (user.status === "admin") {
-        showAdminDashboard();
-      } else if (user.status === "paid") {
-        showBusinessDashboard();
-      } else {
-        alert("Access restricted for free users. Please upgrade your account.");
-      }
+        // If user found, check their status
+        localStorage.setItem('currentUser', JSON.stringify(user)); // Store user info in localStorage
+        if (user.status === 'admin') {
+            window.location.href = 'admin-dashboard.html'; // Redirect to Admin Dashboard
+        } else if (user.status === 'paid') {
+            window.location.href = 'business-dashboard.html'; // Redirect to Business Dashboard
+        } else {
+            alert('Access denied. Your account status is not sufficient.');
+        }
     } else {
-      alert("Invalid username or password. Please try again.");
+        alert('Invalid username or password!');
     }
-  } catch (error) {
-    console.error("Error connecting to the server.", error);
-    alert("Error connecting to the server.");
-  }
 });
-
-function showAdminDashboard() {
-  document.getElementById("login-container").style.display = "none";
-  document.getElementById("admin-dashboard").style.display = "block";
-}
-
-function showBusinessDashboard() {
-  document.getElementById("login-container").style.display = "none";
-  document.getElementById("business-dashboard").style.display = "block";
-}
-
-function logout() {
-  document.getElementById("admin-dashboard").style.display = "none";
-  document.getElementById("business-dashboard").style.display = "none";
-  document.getElementById("login-container").style.display = "block";
-  document.getElementById("login-form").reset();
-}
