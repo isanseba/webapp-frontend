@@ -1,10 +1,14 @@
 // Initialize Supabase client
+import { createClient } from '@supabase/supabase-js';
+
 const supabaseUrl = 'https://ulxjzsvdbhopliovqyay.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVseGp6c3ZkYmhvcGxpb3ZxeWF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUyOTEzNDUsImV4cCI6MjA1MDg2NzM0NX0.b97zaEdtYZ4pRGbSCr186noyILI2cN2tiKFRu0HtHZE';  // Replace with your actual key
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVseGp6c3ZkYmhvcGxpb3ZxeWF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUyOTEzNDUsImV4cCI6MjA1MDg2NzM0NX0.b97zaEdtYZ4pRGbSCr186noyILI2cN2tiKFRu0HtHZE'; // Ensure the key is valid
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Function to handle login
-async function login() {
+async function login(event) {
+    event.preventDefault();  // Prevent form submission to avoid page reload
+
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
@@ -40,5 +44,22 @@ async function login() {
     }
 }
 
-// Make the login function globally accessible
+// Log Supabase client initialization to console
+console.log("Supabase Client Initialized:", supabase);
+
+// Test Supabase connection (optional)
+async function testSupabaseConnection() {
+    try {
+        const { data, error } = await supabase.from('users').select('*');
+        if (error) throw error;
+        console.log("Test Users Data:", data);
+    } catch (error) {
+        console.error("Error Testing Supabase Connection:", error);
+    }
+}
+
+// Uncomment this line if you want to test the Supabase connection on load
+// testSupabaseConnection();
+
+// Make the login function globally accessible so it's usable in the HTML
 window.login = login;
