@@ -1,7 +1,10 @@
-// Initialize Supabase client (directly using the global `createClient` function)
+// No need to import, just use the global 'supabase' object
+
 const supabaseUrl = 'https://ulxjzsvdbhopliovqyay.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVseGp6c3ZkYmhvcGxpb3ZxeWF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUyOTEzNDUsImV4cCI6MjA1MDg2NzM0NX0.b97zaEdtYZ4pRGbSCr186noyILI2cN2tiKFRu0HtHZE'; // Ensure the key is valid
-const supabase = createClient(supabaseUrl, supabaseKey);  // Correctly use createClient()
+
+// Now just use the globally provided `supabase` object
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 // Log Supabase client initialization to console (for debugging)
 console.log("Supabase Client Initialized:", supabase);
