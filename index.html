@@ -20,10 +20,10 @@
         </form>
     </div>
 
-    <!-- Supabase JS CDN (this must be loaded before script.js) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.20.0/dist/supabase.min.js"></script>
+    <!-- Supabase JS CDN (deferred to load after HTML) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.20.0/dist/supabase.min.js" defer></script>
 
-    <!-- Include the custom script.js (after supabase.js) -->
+    <!-- Include the custom script.js (deferred to load after Supabase) -->
     <script src="script.js" defer></script>
 </body>
 </html>
