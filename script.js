@@ -1,7 +1,7 @@
-// Initialize Supabase client
+// Initialize Supabase client using the CDN version
 const supabaseUrl = 'https://ulxjzsvdbhopliovqyay.supabase.co';
-const supabaseKey = 'your-supabase-key'; // Make sure this is set properly
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVseGp6c3ZkYmhvcGxpb3ZxeWF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUyOTEzNDUsImV4cCI6MjA1MDg2NzM0NX0.b97zaEdtYZ4pRGbSCr186noyILI2cN2tiKFRu0HtHZE'; // Make sure this is set correctly
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // Function to handle login
 async function login(event) {
@@ -45,5 +45,19 @@ async function login(event) {
 // Log Supabase client initialization to console
 console.log("Supabase Client Initialized:", supabase);
 
-// Make the login function globally accessible
+// Optional: Test Supabase connection on page load
+async function testSupabaseConnection() {
+    try {
+        const { data, error } = await supabase.from('users').select('*');
+        if (error) throw error;
+        console.log("Test Users Data:", data);
+    } catch (error) {
+        console.error("Error Testing Supabase Connection:", error);
+    }
+}
+
+// Uncomment this line if you want to test the Supabase connection on load
+// testSupabaseConnection();
+
+// Make the login function globally accessible so it's usable in the HTML
 window.login = login;

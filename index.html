@@ -9,7 +9,7 @@
 <body>
     <div class="login-container">
         <h1>Login</h1>
-        <form id="login-form" onsubmit="event.preventDefault(); login();">
+        <form id="login-form" onsubmit="event.preventDefault(); login(event);">
             <label for="username">Username</label>
             <input type="text" id="username" required>
             
@@ -20,7 +20,7 @@
         </form>
     </div>
 
-    <!-- Supabase JS CDN (before the script.js) -->
+    <!-- Supabase JS CDN (ensure this is before the script.js) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.20.0/dist/supabase.min.js"></script>
 
     <!-- Include the script.js -->
