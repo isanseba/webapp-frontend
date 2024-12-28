@@ -1,22 +1,25 @@
-// Initialize Supabase client (Ensure this happens after the script is loaded)
+// Initialize Supabase client
 let supabase;
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Make sure Supabase is loaded before initializing
-    if (typeof supabase === 'undefined') {
-        supabase = supabase.createClient('https://ulxjzsvdbhopliovqyay.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVseGp6c3ZkYmhvcGxpb3ZxeWF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUyOTEzNDUsImV4cCI6MjA1MDg2NzM0NX0.b97zaEdtYZ4pRGbSCr186noyILI2cN2tiKFRu0HtHZE');
-        console.log("Supabase client initialized:", supabase);
-    } else {
-        console.error("Supabase client is not available!");
+    try {
+        // Initialize the Supabase client
+        supabase = window.supabase.createClient(
+            'https://ulxjzsvdbhopliovqyay.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVseGp6c3ZkYmhvcGxpb3ZxeWF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUyOTEzNDUsImV4cCI6MjA1MDg2NzM0NX0.b97zaEdtYZ4pRGbSCr186noyILI2cN2tiKFRu0HtHZE'
+        );
+        console.log("Supabase client initialized successfully.");
+    } catch (error) {
+        console.error("Failed to initialize Supabase client:", error);
     }
 });
 
 // Function to handle login
 async function login(event) {
-    event.preventDefault(); // Ensure this is called with the event object
+    event.preventDefault(); // Prevent form submission reload
 
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
 
     if (!username || !password) {
         alert("Please enter both username and password.");
@@ -24,16 +27,22 @@ async function login(event) {
     }
 
     try {
+        // Query the 'users' table for matching credentials
         const { data, error } = await supabase
             .from('users')
             .select('status')
             .eq('username', username)
             .eq('password', password);
 
-        if (error) throw error;
+        if (error) {
+            console.error("Database error:", error);
+            alert("Login failed. Please try again later.");
+            return;
+        }
 
-        if (data.length > 0) {
+        if (data && data.length > 0) {
             const user = data[0];
+            // Redirect based on user status
             if (user.status === 'admin') {
                 window.location.href = "admin-dashboard.html";
             } else if (user.status === 'paid') {
